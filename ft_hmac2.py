@@ -10,7 +10,6 @@ def get_hotp_token(secret, intervals_no):
 	h = (struct.unpack(">I", h[o:o+4])[0] & 0x7fffffff) % 1000000
 	#unpacking
 	return h
-	
 def get_totp_token(secret):
 	#ensuring to give the same otp for 30 seconds
 	x =str(get_hotp_token(secret,intervals_no=int(time.time())//30))
