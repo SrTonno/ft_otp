@@ -1,25 +1,20 @@
 # ft_otp
-Este proyecto consiste en la implementación de OTP en python que permita registrar una clave inicial y generar una nueva contraseña cada vez que se solicite.
+Este programa en Python permite registrar una clave inicial y generar contraseñas temporales utilizando el algoritmo Time-Based One-Time Password (TOTP).
 
 ## Uso
-El programa se ejecuta desde la línea de comandos y cuenta con las siguientes opciones:
+El programa puede ser utilizado con dos opciones:
 
-## Generar clave
+### -g (generar)
+Utiliza la opción -g para guardar una clave hexadecimal en un archivo cifrado. La clave debe tener al menos 64 caracteres.
 
-> ./ft_otp -g [ruta_archivo_clave_hexadecimal+64]
+> python ft_otp.py -g \<fichero_clave>
 
-Genera un archivo cifrado que contiene la clave de cifrado. La ruta del archivo debe ser especificada en el argumento.
+### -k (clave)
 
-## Generar contraseña temporal
+Utiliza la opción -k para generar una contraseña temporal basada en la clave almacenada en el archivo cifrado.
 
-> ./ft_otp -k [ruta_archivo_clave .key]
+> python ft_otp.py -k \<archivo_cifrado>
 
-Genera una nueva contraseña temporal y la muestra en la salida estándar. La ruta del archivo que contiene la clave de cifrado debe ser especificada en el argumento.
-
-## Requisitos
-- Se debe especificar una clave hexadecimal de al menos 64 caracteres para generar la contraseña temporal.
-- El archivo que contiene la clave de cifrado se cifrará en todo momento.
-- El programa hará uso de alguna librería o función que permita acceder al tiempo del sistema.
 
 ## Ejemplo de uso
 ```
@@ -37,3 +32,13 @@ $ sleep 60
 $ ./ft_otp -k ft_otp.key
 123518
 ```
+## Dependencias
+- sys
+- re
+- hashlib
+- argparse
+- os
+- hmac
+- base64
+- struct
+- time
