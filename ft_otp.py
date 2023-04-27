@@ -6,7 +6,7 @@
 #    By: tvillare <tvillare@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 18:01:34 by tvillare          #+#    #+#              #
-#    Updated: 2023/04/27 19:49:47 by tvillare         ###   ########.fr        #
+#    Updated: 2023/04/27 20:01:37 by tvillare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,7 @@ def create_file_key(file, contenido):
 
 def create_key(file):
 	hexa = leer_fichero(file)
-	if (len(hexa) < 32) and (re_hexa.match(hexa)):
+	if (len(hexa) < 64) and (re_hexa.match(hexa)):
 		print("./ft_otp: error: key must be 64 hexadecimal characters.")
 		return
 	hash_object = hashlib.sha1(hexa.encode())
