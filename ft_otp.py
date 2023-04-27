@@ -6,7 +6,7 @@
 #    By: tvillare <tvillare@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 18:01:34 by tvillare          #+#    #+#              #
-#    Updated: 2023/04/27 16:50:12 by tvillare         ###   ########.fr        #
+#    Updated: 2023/04/27 17:06:21 by tvillare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,13 @@ def leer_fichero(file):
 	archivo.close()
 	return contenido
 
+def create_file_key(file, contenido):
+	## ESCIRBIR EN EL FICHERO
+	name = file.split(" ")[0]
+	with open(file + ."key", "w") as archivo
+		archivo.write(contenido)
+		archivo.close()
+
 def create_key(file):
 	hexa = leer_fichero(file)
 	if (len(hexa) < 64) and (re_hexa.match(hexa)):
@@ -33,5 +40,6 @@ def create_key(file):
 	hash_object = hashlib.sha1(hexa.encode())
 	# Convertimos el valor hash a una cadena hexadecimal
 	hex_dig = hash_object.hexdigest()
+	create_file_key(file, hex_dig):
 
 
