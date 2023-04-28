@@ -6,7 +6,7 @@
 #    By: tvillare <tvillare@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 18:01:34 by tvillare          #+#    #+#              #
-#    Updated: 2023/04/27 20:01:37 by tvillare         ###   ########.fr        #
+#    Updated: 2023/04/28 17:14:05 by tvillare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ import hmac
 import base64
 import struct
 import time
+from cryptography.fernet import Fernet
 
 parser = argparse.ArgumentParser(description='')
 
@@ -37,6 +38,30 @@ parser.add_argument('-k',
 args = parser.parse_args()
 
 re_hexa = re.compile("^[0-9a-fA-F]+$")
+
+
+
+
+def cifrado_fernet(message):
+	# Generar una clave secreta aleatoria
+	key = Fernet.generate_key()
+
+	# Crear un objeto Fernet con la clave secreta
+	cipher_suite = Fernet(key)
+
+	# Cifrar un mensaje
+	cipher_text = cipher_suite.encrypt(message.encode())
+	return cipher_text
+
+
+
+def decoder_fernet(message):
+	key = Fernet.generate_key()
+	cipher_suite = Fernet(key)
+	plain_text = cipher_suite.decrypt(message)
+	return plain_text
+
+
 
 ####crear id de tiempo
 def get_hotp_token(secret, intervals_no):
@@ -57,6 +82,9 @@ def get_totp_token(secret):
 	#adding 0 in the beginning till OTP has 6 digits
 	return x.zfill(6)
 ######crear .key
+
+
+
 def leer_fichero(file):
 	if os.access(file, os.R_OK):
 		archivo = open(file, "r")
@@ -71,7 +99,7 @@ def leer_fichero(file):
 def create_file_key(file, contenido):
 	## ESCIRBIR EN EL FICHERO
 	name = file.split(".")[0] + ".key"
-	with open(name, "w") as archivo:
+	with open(name, "wb") as archivo:
 		archivo.write(contenido)
 		archivo.close()
 
@@ -80,9 +108,10 @@ def create_key(file):
 	if (len(hexa) < 64) and (re_hexa.match(hexa)):
 		print("./ft_otp: error: key must be 64 hexadecimal characters.")
 		return
-	hash_object = hashlib.sha1(hexa.encode())
+	#hash_object = hashlib.sha1(hexa.encode())
 	# Convertimos el valor hash a una cadena hexadecimal
-	hex_dig = hash_object.hexdigest()
+	#hex_dig = hash_object.hexdigest()
+	hex_dig = cifrado_fernet(hexa)
 	create_file_key(file, hex_dig)
 
 
@@ -92,5 +121,6 @@ if (args.g != None):
 	create_key(args.g)
 elif (args.k != None):
 	secret = leer_fichero(args.k)
+	plain_text = decoder_fernet(secret)
 	key = get_totp_token(secret)
 	print(key)
