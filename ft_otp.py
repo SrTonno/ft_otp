@@ -6,7 +6,7 @@
 #    By: tvillare <tvillare@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 18:01:34 by tvillare          #+#    #+#              #
-#    Updated: 2023/04/28 20:09:59 by tvillare         ###   ########.fr        #
+#    Updated: 2023/05/01 18:40:53 by tvillare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,8 +40,8 @@ args = parser.parse_args()
 re_hexa = re.compile("^[0-9a-fA-F]+$")
 
 # Definir clave maestra
-clave_maestra = b"clave_maestra_1234"
-clave_maestra = clave_maestra[:16]
+#clave_maestra = b"clave_maestra_1234"
+#clave_maestra = clave_maestra[:16]
 
 
 def cifrar(mensaje, clave_maestra):
@@ -117,7 +117,13 @@ def create_key(file):
 	hex_dig = cifrar(hexa, clave_maestra)
 	create_file_key(file, hex_dig)
 
+def get_passwd():
+	secret = input("Introduce la contraeña: ")
+	secret_hash = hashlib.sha256(secret.encode('utf-8')).digest()
+	passwd = secret_hash
+	return passwd
 
+clave_maestra = get_passwd()
 if (args.g != None):
 	create_key(args.g)
 elif (args.k != None):
@@ -128,4 +134,5 @@ elif (args.k != None):
 		print("Error descifrado")
 	else:
 		key = get_totp_token(plain_text)
+
 		print(key)
