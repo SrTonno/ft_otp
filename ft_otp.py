@@ -6,7 +6,7 @@
 #    By: tvillare <tvillare@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 18:01:34 by tvillare          #+#    #+#              #
-#    Updated: 2023/05/01 18:40:53 by tvillare         ###   ########.fr        #
+#    Updated: 2023/05/03 17:26:25 by tvillare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,12 @@ import sys
 import re
 import hashlib
 import argparse
-import os
 import hmac
-import base64
 import struct
 import time
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-
+import qrcode_terminal
 
 parser = argparse.ArgumentParser(description='')
 
@@ -38,11 +36,6 @@ parser.add_argument('-k',
 args = parser.parse_args()
 
 re_hexa = re.compile("^[0-9a-fA-F]+$")
-
-# Definir clave maestra
-#clave_maestra = b"clave_maestra_1234"
-#clave_maestra = clave_maestra[:16]
-
 
 def cifrar(mensaje, clave_maestra):
 	# Generar un vector de inicialización aleatorio
@@ -68,7 +61,6 @@ def descifrar(mensaje_cifrado, clave_maestra):
 
 	return mensaje_descifrado
 
-
 ####crear id de tiempo
 def get_hotp_token(secret, intervals_no):
 	key = bytes.fromhex(secret)
@@ -79,7 +71,6 @@ def get_hotp_token(secret, intervals_no):
 	o = o = h[19] & 15
 	# Generar un hash usando ambos. El algoritmo de hash es HMAC
 	h = (struct.unpack(">I", h[o:o+4])[0] & 0x7fffffff) % 1000000
-	#unpacking
 	return h
 
 def get_totp_token(secret):
@@ -123,6 +114,10 @@ def get_passwd():
 	passwd = secret_hash
 	return passwd
 
+if (args.g != None) and (args.k != None):
+		print("Demasiados argumentos")
+		sys.exit()
+
 clave_maestra = get_passwd()
 if (args.g != None):
 	create_key(args.g)
@@ -134,5 +129,5 @@ elif (args.k != None):
 		print("Error descifrado")
 	else:
 		key = get_totp_token(plain_text)
-
 		print(key)
+		qrcode_terminal.draw(str(key))
