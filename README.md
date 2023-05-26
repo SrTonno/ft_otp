@@ -42,3 +42,4 @@ $ ./ft_otp -k ft_otp.key
 - base64
 - struct
 - time
+- pycrypto
